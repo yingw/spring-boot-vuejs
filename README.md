@@ -26,33 +26,50 @@ This project is used as example in a variety of articles & as eBook:
 
 [blog.codecentric.de/en/2018/04/spring-boot-vuejs](https://blog.codecentric.de/en/2018/04/spring-boot-vuejs) | [JavaMagazin 8.2018](https://jaxenter.de/ausgaben/java-magazin-8-18) | [entwickler.press shortcuts 229](https://www.amazon.com/Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook/dp/B07HQF9VX4/ref=sr_1_1?ie=UTF8&qid=1538484852&sr=8-1&keywords=Vue-js-f%C3%BCr-alle-Wissenswertes-Einsteiger-ebook) | [softwerker Vol.12](https://info.codecentric.de/softwerker-vol-12)
 
-## Table of Contents  
-* [In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence)
-* [Setup Vue.js & Spring Boot](#setup-vuejs--spring-boot)
-* [Project setup](#project-setup)
-* [Backend](#backend)
-* [Frontend](#frontend)
-* [Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)](#use-frontend-maven-plugin-to-handle-npm-node-bower-grunt-gulp-webpack-and-so-on-)
-* [First App run](first-app-run)
-* [Faster feedback with webpack-dev-server](#faster-feedback-with-webpack-dev-server)
-* [Browser developer tools extension](#browser-developer-tools-extension)
-* [HTTP calls from Vue.js to (Spring Boot) REST backend](#http-calls-from-vuejs-to-spring-boot-rest-backend)
-* [The problem with SOP](#the-problem-with-sop)
-* [But STOP! Webpack & Vue have something much smarter for us to help us with SOP!](#but-stop-webpack--vue-have-something-much-smarter-for-us-to-help-us-with-sop)
-* [Bootstrap & Vue.js](#bootstrap--vuejs)
-* [Heroku Deployment](#heroku-deployment)
-* [Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend](#using-herokus-postgres-as-database-for-spring-boot-backend-and-vuejs-frontend)
-* [Testing](#testing)
-* [Jest](#jest)
-* [Jest Configuration](#jest-configuration)
-* [Integration in Maven build (via frontend-maven-plugin)](#integration-in-maven-build-via-frontend-maven-plugin)
-* [Run Jest tests inside IntelliJ](#run-jest-tests-inside-intellij)
-* [End-2-End (E2E) tests with Nightwatch](#end-2-end-e2e-tests-with-nightwatch)
-* [NPM Security](#npm-security)
-* [Shift from templates to plugin-based architecture in Vue Cli 3](#shift-from-templates-to-plugin-based-architecture-in-vue-cli-3)
-* [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
-* [The vue.config.js file](#the-vueconfigjs-file)
-* [Build and run with Docker](#build-and-run-with-docker)
+## 目录
+- [spring-boot-vuejs](#spring-boot-vuejs)
+  - [目录](#%E7%9B%AE%E5%BD%95)
+  - [In Search of a new Web Frontend-Framework after 2 Years of absence...](#in-search-of-a-new-web-frontend-framework-after-2-years-of-absence)
+  - [设置 Vue.js 和 Spring Boot 环境](#%E8%AE%BE%E7%BD%AE-vuejs-%E5%92%8C-spring-boot-%E7%8E%AF%E5%A2%83)
+    - [准备](#%E5%87%86%E5%A4%87)
+      - [MacOSX](#macosx)
+      - [Linux](#linux)
+      - [Windows](#windows)
+  - [项目设置](#%E9%A1%B9%E7%9B%AE%E8%AE%BE%E7%BD%AE)
+  - [后端](#%E5%90%8E%E7%AB%AF)
+  - [前端](#%E5%89%8D%E7%AB%AF)
+    - [使用 frontend-maven-plugin 插件来管理 NPM, Node, Bower, Grunt, Gulp, Webpack 等等 :)](#%E4%BD%BF%E7%94%A8-frontend-maven-plugin-%E6%8F%92%E4%BB%B6%E6%9D%A5%E7%AE%A1%E7%90%86-npm-node-bower-grunt-gulp-webpack-%E7%AD%89%E7%AD%89)
+    - [让 Webpack 输出 dist/ 目录的内容到 target/](#%E8%AE%A9-webpack-%E8%BE%93%E5%87%BA-dist-%E7%9B%AE%E5%BD%95%E7%9A%84%E5%86%85%E5%AE%B9%E5%88%B0-target)
+  - [第一次运行](#%E7%AC%AC%E4%B8%80%E6%AC%A1%E8%BF%90%E8%A1%8C)
+  - [用 webpack-dev-server 热部署](#%E7%94%A8-webpack-dev-server-%E7%83%AD%E9%83%A8%E7%BD%B2)
+  - [浏览器的开发工具插件](#%E6%B5%8F%E8%A7%88%E5%99%A8%E7%9A%84%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E6%8F%92%E4%BB%B6)
+  - [IntelliJ 集成](#intellij-%E9%9B%86%E6%88%90)
+  - [从 Vue.js 向 (Spring Boot) REST 后端发起 HTTP 请求](#%E4%BB%8E-vuejs-%E5%90%91-spring-boot-rest-%E5%90%8E%E7%AB%AF%E5%8F%91%E8%B5%B7-http-%E8%AF%B7%E6%B1%82)
+    - [SOP 问题（跨域）](#sop-%E9%97%AE%E9%A2%98%E8%B7%A8%E5%9F%9F)
+      - [启用 Axios 的 CORS 支持](#%E5%90%AF%E7%94%A8-axios-%E7%9A%84-cors-%E6%94%AF%E6%8C%81)
+      - [启用 Spring Boot 的 CORS 支持](#%E5%90%AF%E7%94%A8-spring-boot-%E7%9A%84-cors-%E6%94%AF%E6%8C%81)
+      - [打住！Webpack 和 Vue 有更智能的 SOP 解决方案！](#%E6%89%93%E4%BD%8Fwebpack-%E5%92%8C-vue-%E6%9C%89%E6%9B%B4%E6%99%BA%E8%83%BD%E7%9A%84-sop-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88)
+  - [Bootstrap 和 Vue.js](#bootstrap-%E5%92%8C-vuejs)
+  - [Heroku Deployment](#heroku-deployment)
+      - [Accessing Spring Boot REST backend on Heroku from Vue.js frontend](#accessing-spring-boot-rest-backend-on-heroku-from-vuejs-frontend)
+      - [Using Heroku's Postgres as Database for Spring Boot backend and Vue.js frontend](#using-herokus-postgres-as-database-for-spring-boot-backend-and-vuejs-frontend)
+  - [测试](#%E6%B5%8B%E8%AF%95)
+    - [安装 vue-test-utils](#%E5%AE%89%E8%A3%85-vue-test-utils)
+    - [Jest](#jest)
+        - [Jest 的配置](#jest-%E7%9A%84%E9%85%8D%E7%BD%AE)
+        - [Maven 中集成 (通过 frontend-maven-plugin)](#maven-%E4%B8%AD%E9%9B%86%E6%88%90-%E9%80%9A%E8%BF%87-frontend-maven-plugin)
+        - [在 IntelliJ 中运行 Jest 测试](#%E5%9C%A8-intellij-%E4%B8%AD%E8%BF%90%E8%A1%8C-jest-%E6%B5%8B%E8%AF%95)
+  - [用 Nightwatch 端到端 (E2E) 测试](#%E7%94%A8-nightwatch-%E7%AB%AF%E5%88%B0%E7%AB%AF-e2e-%E6%B5%8B%E8%AF%95)
+      - [编写 Nightwatch 测试](#%E7%BC%96%E5%86%99-nightwatch-%E6%B5%8B%E8%AF%95)
+        - [运行 E2E 测试](#%E8%BF%90%E8%A1%8C-e2e-%E6%B5%8B%E8%AF%95)
+  - [运行所有测试](#%E8%BF%90%E8%A1%8C%E6%89%80%E6%9C%89%E6%B5%8B%E8%AF%95)
+  - [NPM 安全](#npm-%E5%AE%89%E5%85%A8)
+  - [Shift from templates to plugin-based architecture in Vue Cli 3](#shift-from-templates-to-plugin-based-architecture-in-vue-cli-3)
+      - [OMG! My package.json is so small - Vue CLI 3 Plugins](#omg-my-packagejson-is-so-small---vue-cli-3-plugins)
+      - [vue.config.js 文件](#vueconfigjs-%E6%96%87%E4%BB%B6)
+      - [更新项目的 Vue](#%E6%9B%B4%E6%96%B0%E9%A1%B9%E7%9B%AE%E7%9A%84-vue)
+  - [用 Docker 编译及运行](#%E7%94%A8-docker-%E7%BC%96%E8%AF%91%E5%8F%8A%E8%BF%90%E8%A1%8C)
+- [Links](#links)
 
 
 
@@ -76,9 +93,9 @@ So I think, it could be a good idea to invest a day or so into Vue.js. Let’s h
 
 
 
-## Setup Vue.js & Spring Boot
+## 设置 Vue.js 和 Spring Boot 环境
 
-### Prerequisites
+### 准备
 
 #### MacOSX
 
@@ -102,7 +119,7 @@ choco install npm
 npm install -g @vue/cli
 ```
 
-## Project setup
+## 项目设置
 
 ```
 spring-boot-vuejs
@@ -115,7 +132,7 @@ spring-boot-vuejs
 └── pom.xml     → Maven parent pom managing both modules
 ```
 
-## Backend
+## 后端
 
 Go to https://start.spring.io/ and initialize a Spring Boot app with `Web` and `Actuator`. Place the zip’s contents in the backend folder.
 
@@ -159,7 +176,7 @@ Customize pom to copy content from Frontend for serving it later with the embedd
 ```
 
 
-## Frontend
+## 前端
 
 Creating our `frontend` project is done by the slightly changed (we use `--no-git` here, because our parent project is already a git repository and otherwise vue CLI 3 would initialize an new one):
 
@@ -167,13 +184,13 @@ Creating our `frontend` project is done by the slightly changed (we use `--no-gi
 vue create frontend --no-git
 ```
 
-see https://cli.vuejs.org/guide/
+参考 https://cli.vuejs.org/guide/
 
 This will initialize a project skeleton for Vue.js in /frontend directory - it, therefore, asks some questions in the cli:
 
 ![vuejs-cli3-create](screenshots/vuejs-cli3-create.png)
 
-__Do not__ choose the default preset with `default (babel, eslint)`, because we need some more plugins for our project here (choose the Plugins with the __space bar__):
+__不要__ 选择默认的选项 `default (babel, eslint)`, because we need some more plugins for our project here (choose the Plugins with the __space bar__):
 
 ![vuejs-cli3-select-plugins](screenshots/vuejs-cli3-select-plugins.png)
 
@@ -184,7 +201,7 @@ You can now also use the new `vue ui` command/feature to configure your project:
 If you want to learn more about installing Vue.js, head over to the docs: https://vuejs.org/v2/guide/installation.html
 
 
-### Use frontend-maven-plugin to handle NPM, Node, Bower, Grunt, Gulp, Webpack and so on :)
+### 使用 frontend-maven-plugin 插件来管理 NPM, Node, Bower, Grunt, Gulp, Webpack 等等 :)
 
 If you’re a backend dev like me, this Maven plugin here https://github.com/eirslett/frontend-maven-plugin is a great help for you - because, if you know Maven, that’s everything you need! Just add this plugin to the frontend’s `pom.xml`:
 
@@ -235,7 +252,7 @@ If you’re a backend dev like me, this Maven plugin here https://github.com/eir
 </build>
 ```
 
-### Tell Webpack to output the dist/ contents to target/
+### 让 Webpack 输出 dist/ 目录的内容到 target/
 
 Commonly, node projects will create a dist/ directory for builds which contains the minified source code of the web app - but we want it all in `/target`. Therefore we need to create the optional [vue.config.js](https://cli.vuejs.org/config/#vue-config-js) and configure the `outputDir` and `assetsDir` correctly: 
 
@@ -250,43 +267,43 @@ module.exports = {
 ```
 
 
-## First App run
+## 第一次运行
 
-Inside the root directory, do a: 
+在根目录，执行： 
 
 ```
 mvn clean install
 ```
 
-Run our complete Spring Boot App:
+运行 Spring Boot 的应用：
 
 ```
 mvn --projects backend spring-boot:run
 ```
 
-Now go to http://localhost:8088/ and have a look at your first Vue.js Spring Boot App.
+访问 http://localhost:8088/ 看一下你的第一个 Vue.js 集成了 Spring Boot 的应用。
 
 
 
-## Faster feedback with webpack-dev-server
+## 用 webpack-dev-server 热部署
 
-The webpack-dev-server, which will update and build every change through all the parts of the JavaScript build-chain, is pre-configured in Vue.js out-of-the-box! So the only thing needed to get fast feedback development-cycle is to cd into `frontend` and run:
+The webpack-dev-server, which will update and build every change through all the parts of the JavaScript build-chain, is pre-configured in Vue.js out-of-the-box! 获得这种热部署方式只需要 cd 到目录 `frontend` 执行：
 
 ```
 npm run serve
 ```
 
-That’s it! 
+搞定！
 
 
-## Browser developer tools extension
+## 浏览器的开发工具插件
 
-Install vue-devtools Browser extension https://github.com/vuejs/vue-devtools and get better feedback, e.g. in Chrome:
+安装 vue-devtools 浏览器插件 https://github.com/vuejs/vue-devtools and get better feedback, e.g. in Chrome:
 
 ![vue-devtools-chrome](screenshots/vue-devtools-chrome.png)
 
 
-## IntelliJ integration
+## IntelliJ 集成
 
 There's a blog post: https://blog.jetbrains.com/webstorm/2018/01/working-with-vue-js-in-webstorm/
 
@@ -294,7 +311,7 @@ Especially the `New... Vue Component` looks quite cool :)
 
 
 
-## HTTP calls from Vue.js to (Spring Boot) REST backend
+## 从 Vue.js 向 (Spring Boot) REST 后端发起 HTTP 请求
 
 Prior to Vue 2.0, there was a build in solution (vue-resource). But from 2.0 on, 3rd party libraries are necessary. One of them is [Axios](https://github.com/mzabriskie/axios) - also see blog post https://alligator.io/vuejs/rest-api-axios/
 
@@ -302,7 +319,7 @@ Prior to Vue 2.0, there was a build in solution (vue-resource). But from 2.0 on,
 npm install axios --save
 ```
 
-Calling a REST service with Axios is simple. Go into the script area of your component, e.g. Hello.vue and add:
+用 Axios 请求 REST 服务是非常简便的。在 component 的 script 里，例如 Hello.vue，添加：
 
 ```js
 import axios from 'axios'
@@ -335,14 +352,14 @@ In your template area you can now request a service call via calling `callRestSe
 <h3>{{ response }}</h3>
 ```
 
-### The problem with SOP
+### SOP 问题（跨域）
 
-Single-Origin Policy (SOP) could be a problem if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
+Single-Origin Policy (SOP)（同源策略） could be a problem if we want to develop our app. Because the webpack-dev-server runs on http://localhost:8080 and our Spring Boot REST backend on http://localhost:8088.
 
-We need to use Cross-Origin Resource Sharing Protocol (CORS) to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
+We need to use Cross-Origin Resource Sharing Protocol (CORS)（跨域资源共享） to handle that (read more background info about CORS here https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS)
 
 
-#### Enabling Axios CORS support
+#### 启用 Axios 的 CORS 支持
 
 Create a central Axios configuration file called `http-commons.js`:
 
@@ -387,7 +404,7 @@ export default {
   }
 ```
 
-#### Enabling Spring Boot CORS support
+#### 启用 Spring Boot 的 CORS 支持
 
 Additionally, we need to configure our Spring Boot backend to answer with the appropriate CORS HTTP Headers in its responses (there's a good tutorial here: https://spring.io/guides/gs/rest-service-cors/). Therefore we add the annotation `@CrossOrigin` to our BackendController:
 
@@ -418,7 +435,7 @@ public WebMvcConfigurer corsConfigurer() {
 Now all calls to resources behind `api/` will return the correct CORS headers. 
 
 
-#### But STOP! Webpack & Vue have something much smarter for us to help us with SOP!
+#### 打住！Webpack 和 Vue 有更智能的 SOP 解决方案！
 
 Thanks to my colleague [Daniel](https://www.codecentric.de/team/dre/) who pointed me to the nice proxying feature of Webpack dev-server, we don't need to configure all the complex CORS stuff anymore!
 
@@ -458,7 +475,7 @@ Object.keys(proxyTable).forEach(function (context) {
 ```
 
 
-## Bootstrap & Vue.js
+## Bootstrap 和 Vue.js
 
 There’s a nice integration of Bootstrap in Vue.js: https://bootstrap-vue.js.org/
 
@@ -703,9 +720,9 @@ export default {
 ```
 
 
-## Testing 
+## 测试 
 
-### Install vue-test-utils
+### 安装 vue-test-utils
 
 https://github.com/vuejs/vue-test-utils
 
@@ -713,7 +730,7 @@ https://github.com/vuejs/vue-test-utils
 
 ### Jest
 
-Jest is a new shooting star in the sky of JavaScript testing frameworks: https://facebook.github.io/jest/
+Jest 是 JavaScript 测试框架的新秀: https://facebook.github.io/jest/
 
 Intro-Blogpost: https://blog.codecentric.de/2017/06/javascript-unit-tests-sind-schwer-aufzusetzen-keep-calm-use-jest/
 
@@ -750,7 +767,7 @@ How to test components with `router-view` or `router-link` https://vue-test-util
 
 The test files itself could be named `xyz.spec.js` or `xyz.test.js` - and could reside nearly everywhere in the project.
 
-##### Jest Configuration  
+##### Jest 的配置  
 
 The Jest run-configuration is done inside the [package.json](frontend/package.json):
 
@@ -788,7 +805,7 @@ Jest needs to know the right output directory `/tests/unit/coverage` to show a c
 ![unittestrun-jest](screenshots/unittestrun-jest.png)
 
 
-##### Integration in Maven build (via frontend-maven-plugin)
+##### Maven 中集成 (通过 frontend-maven-plugin)
 
 Inside the [pom.xml](pom.xml) we always automatically run the Jest Unittests with the following configuration:
 
@@ -815,7 +832,7 @@ This will integrate the Jest Unittests right after the npm run build command, ju
 And don't mind the depiction with `ERROR` - this is just a known bug: https://github.com/eirslett/frontend-maven-plugin/issues/584
 
 
-##### Run Jest tests inside IntelliJ
+##### 在 IntelliJ 中运行 Jest 测试
 
 First, we need to install the NodeJS IntelliJ plugin (https://www.jetbrains.com/help/idea/developing-node-js-applications.html), which isn't bundled with IntelliJ by default:
 
@@ -839,7 +856,7 @@ Now, when running `All Tests`, this should look like you're already used to Unit
 
  
 
-## End-2-End (E2E) tests with Nightwatch
+## 用 Nightwatch 端到端 (E2E) 测试
 
 Great tooling: http://nightwatchjs.org/ - Nightwatch controls WebDriver / Selenium standalone Server in own child process and abstracts from those, providing a handy DSL for Acceptance tests:
 
@@ -852,7 +869,7 @@ Nightwatch is configured through the [nightwatch.conf.js](/frontend/test/e2e/nig
 More options could be found in the docs: http://nightwatchjs.org/gettingstarted/#settings-file
 
 
-#### Write Nightwatch tests
+#### 编写 Nightwatch 测试
 
 An example Nightwatch test is provided in [HelloAcceptance.test.js](/frontend/test/e2e/specs/HelloAcceptance.test.js):
 
@@ -870,18 +887,18 @@ module.exports = {
 }
 ```
 
-##### Run E2E Tests
+##### 运行 E2E 测试
 
 `npm run test:e2e`
 
 
-## Run all tests
+## 运行所有测试
 
  `npm test`
 
 
 
-## NPM Security
+## NPM 安全
 
 npm Security - npm@6
 
@@ -1023,7 +1040,7 @@ As you dig into the directories like `node_modules/@vue/cli-plugin-e2e-nightwatc
 This is really cool, I have to admit!
 
 
-#### The vue.config.js file
+#### vue.config.js 文件
 
 Vue CLI 3 removes the need for explicit configuration files - and thus you wont find any `build` or `config` directories in your projects root any more. This now implements a "convention over configuration" approach, which makes it much easier to kick-start a Vue.js project, as it provides widly used defaults to webpack etc. It also eases the upgradeability of Vue.js projects - or even makes it possible. 
 
@@ -1049,7 +1066,7 @@ module.exports = {
 }
 ```
 
-#### Updating Vue in an existing project
+#### 更新项目的 Vue
 
 Update your local `@vue/cli` to the latest version:
 
@@ -1065,7 +1082,7 @@ npm update
 ```
 
 
-## Build and run with Docker
+## 用 Docker 编译及运行
 
 In the issue [jonashackt/spring-boot-vuejs/issues/25](https://github.com/jonashackt/spring-boot-vuejs/issues/25) the question on how to build and run our spring-boot-vuejs app with Docker. 
 
